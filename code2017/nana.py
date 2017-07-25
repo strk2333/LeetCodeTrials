@@ -1,4 +1,4 @@
-class StrOpts:
+class BasicOpts:
     """
     strStr
     Source
@@ -22,7 +22,8 @@ class StrOpts:
     """
 
     @staticmethod
-    def str_str(source, target):
+    # Single for with rollback
+    def str_str1(source, target):
         j = 0
         mark = 0
         for i in range(0, len(target)):
@@ -40,7 +41,22 @@ class StrOpts:
                 mark = 0
         return -1
 
+    @staticmethod
+    # Double for
+    def str_str2(source, target):
+        mark = 0
+        for i in range(0, len(target)):
+            for j in range(0, len(source)):
+                if target[i + j] != source[j]:
+                    break
+
+                if j == len(source) - 1:
+                    return i
+
+        return -1
+
 
 def run():
-    str_opt = StrOpts()
-    print(str_opt.str_str('in', 'stonginstring'))
+    str_opt = BasicOpts()
+    print(str_opt.str_str1('in', 'stonginstring'))
+    print(str_opt.str_str2('in', 'stonginstring'))
