@@ -22,23 +22,25 @@ class StrOpts:
     """
 
     @staticmethod
-    def str_str(self, source, target):
+    def str_str(source, target):
         j = 0
         mark = 0
         for i in range(0, len(target)):
             if source[j] == target[i]:
-                j += 1
                 if j == 0:
                     mark = i
-                else:
-                    j += 1
+
                 if j == len(source) - 1:
                     return mark
-            elif mark != 0:
-                i = mark;
+
+                j += 1
+            elif j != 0:
+                i = mark
+                j = 0
                 mark = 0
+        return -1
 
 
 def run():
     str_opt = StrOpts()
-    print(str_opt.str_str())
+    print(str_opt.str_str('in', 'stonginstring'))
