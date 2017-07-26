@@ -1,7 +1,6 @@
-class BasicOpts:
+class StrOpts:
     """
     strStr
-    Source
     leetcode: Implement strStr() | LeetCode OJ
     lintcode: lintcode - (13) strstr
     strstr (a.k.a find sub string), is a useful function in string operation.
@@ -22,8 +21,10 @@ class BasicOpts:
     """
 
     @staticmethod
-    # Single for with rollback
+    # single for with rollback
     def str_str1(source, target):
+        if source is None or target is None:
+            return -1
         j = 0
         mark = 0
         for i in range(0, len(target)):
@@ -42,8 +43,10 @@ class BasicOpts:
         return -1
 
     @staticmethod
-    # Double for
+    # double for
     def str_str2(source, target):
+        if source is None or target is None:
+            return -1
         mark = 0
         for i in range(0, len(target)):
             for j in range(0, len(source)):
@@ -52,11 +55,58 @@ class BasicOpts:
 
                 if j == len(source) - 1:
                     return i
-
         return -1
+
+    # KMP? NotExist
+
+    @staticmethod
+    def try_str_str():
+        source = 'in'
+        target = 'stronginstring'
+        print('method1', StrOpts.str_str1(source, target))
+        print('method2', StrOpts.str_str2(source, target))
+
+    """
+    CC150: (158) Two Strings Are Anagrams
+    Write a method anagram(s,t) to decide if two strings are anagrams or not.
+    Example
+    Given s="abcd", t="dcab", return true.
+    Challenge
+    O(n) time, O(1) extra space
+    """
+
+    @staticmethod
+    # simple compare
+    def anagrams_word1(source, target):
+        if source is None or target is None or len(source) != len(target):
+            return False
+        slen = len(source)
+        for i in range(0, slen):
+            for j in range(0, slen):
+                if source[i] == target[j]:
+                    target.replace(target[j], '', 1)
+                    break
+                elif j == slen - 1:
+                    return False
+        return True
+
+    # reverse string and compare
+    @staticmethod
+    def anagrams_word2(source, target):
+        if source is None or target is None or len(source) != len(target):
+            return False
+        return source[::-1] == target
+
+    @staticmethod
+    def try_anagrams_word():
+        source = 'able wts I er'
+        target = 're I saw elbt'
+        print('source:able was I er', '\ntarget:re I saw elba')
+        print('Method1 is anagrams:', StrOpts.anagrams_word1(source, target))
+        print('Method2 is anagrams:', StrOpts.anagrams_word2(source, target))
+
+    pass
 
 
 def run():
-    str_opt = BasicOpts()
-    print(str_opt.str_str1('in', 'stonginstring'))
-    print(str_opt.str_str2('in', 'stonginstring'))
+    StrOpts.try_anagrams_word()
