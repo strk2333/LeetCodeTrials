@@ -105,8 +105,38 @@ class StrOpts:
         print('Method1 is anagrams:', StrOpts.anagrams_word1(source, target))
         print('Method2 is anagrams:', StrOpts.anagrams_word2(source, target))
 
+    """
+    lintcode: (55) Compare Strings
+    Compare two strings A and B, determine whether A contains all of the char
+    acters in B.
+    The characters in string A and B are all Upper Case letters.
+    Example
+    For A = "ABCD", B = "ABC", return true.
+    For A = "ABCD" B = "AABC", return false.
+    """
+    @staticmethod
+    def str_contain(pattern, matcher):
+        counter = {0 * 26}
+        for c in pattern:
+            counter[ord(str.upper(c)) - ord('A')] += 1
+
+        for c in matcher:
+            counter[ord(str.upper(c)) - ord('A')] -= 1
+
+        for i in counter:
+            if i < 0:
+                return False
+        return True
+
+    @staticmethod
+    def try_str_contain():
+        source = 'AcbcDA'
+        target = 'ABadcc'
+        print('source:AcbcDA', '\ntarget:ABadcc')
+        print('Method1:', StrOpts.str_contain(source, target))
+
     pass
 
 
 def run():
-    StrOpts.try_anagrams_word()
+    StrOpts.try_str_contain()
