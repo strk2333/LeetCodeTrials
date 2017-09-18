@@ -1,4 +1,4 @@
-class StrOpts:
+class MFuns:
     """
     strStr
     leetcode: Implement strStr() | LeetCode OJ
@@ -63,8 +63,8 @@ class StrOpts:
     def try_str_str():
         source = 'in'
         target = 'stronginstring'
-        print('method1', StrOpts.str_str1(source, target))
-        print('method2', StrOpts.str_str2(source, target))
+        print('method1', MFuns.str_str1(source, target))
+        print('method2', MFuns.str_str2(source, target))
 
     """
     CC150: (158) Two Strings Are Anagrams
@@ -103,8 +103,8 @@ class StrOpts:
         source = 'able was I er'
         target = 're I saw elba'
         print('source:able was I er', '\ntarget:re I saw elba')
-        print('Method1 is anagrams:', StrOpts.anagrams_word1(source, target))
-        print('Method2 is anagrams:', StrOpts.anagrams_word2(source, target))
+        print('Method1 is anagrams:', MFuns.anagrams_word1(source, target))
+        print('Method2 is anagrams:', MFuns.anagrams_word2(source, target))
 
     """
     lintcode: (55) Compare Strings
@@ -135,7 +135,7 @@ class StrOpts:
         source = 'AcbcDA'
         target = 'ABadcc'
         print('source:AcbcDA', '\ntarget:ABadcc')
-        print('Method1:', StrOpts.str_contain(source, target))
+        print('Method1:', MFuns.str_contain(source, target))
 
     """
     Anagrams
@@ -151,11 +151,14 @@ class StrOpts:
     """
 
     @staticmethod
-    def pick_anagrams(self):
+    def pick_anagrams():
         print("Pick Anagrams")
     pass
 
+    def run(self):
+        MFuns.try_anagrams_word()
+
 
 def run():
-    StrOpts.try_anagrams_word()
+    print("July Code.")
 
