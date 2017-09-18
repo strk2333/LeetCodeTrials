@@ -82,25 +82,26 @@ class StrOpts:
             return False
         slen = len(source)
         for i in range(0, slen):
-            for j in range(0, slen):
+            for j in range(0, len(target)):
                 if source[i] == target[j]:
-                    target.replace(target[j], '', 1)
+                    target = target.replace(target[j], '', 1)
                     break
                 elif j == slen - 1:
                     return False
-        return True
 
-    # reverse string and compare
+        return len(target) == 0
+
+    # sort and compare
     @staticmethod
     def anagrams_word2(source, target):
         if source is None or target is None or len(source) != len(target):
             return False
-        return source[::-1] == target
+        return sorted(source) == sorted(target)
 
     @staticmethod
     def try_anagrams_word():
-        source = 'able wts I er'
-        target = 're I saw elbt'
+        source = 'able was I er'
+        target = 're I saw elba'
         print('source:able was I er', '\ntarget:re I saw elba')
         print('Method1 is anagrams:', StrOpts.anagrams_word1(source, target))
         print('Method2 is anagrams:', StrOpts.anagrams_word2(source, target))
@@ -114,13 +115,14 @@ class StrOpts:
     For A = "ABCD", B = "ABC", return true.
     For A = "ABCD" B = "AABC", return false.
     """
+
     @staticmethod
-    def str_contain(pattern, matcher):
-        counter = {0 * 26}
-        for c in pattern:
+    def str_contain(p1, p2):
+        counter = [0] * 26
+        for c in p1:
             counter[ord(str.upper(c)) - ord('A')] += 1
 
-        for c in matcher:
+        for c in p2:
             counter[ord(str.upper(c)) - ord('A')] -= 1
 
         for i in counter:
@@ -135,8 +137,25 @@ class StrOpts:
         print('source:AcbcDA', '\ntarget:ABadcc')
         print('Method1:', StrOpts.str_contain(source, target))
 
+    """
+    Anagrams
+    Source
+    leetcode: Anagrams | LeetCode OJ
+    lintcode: (171) Anagrams
+    Given an array of strings, return all groups of strings that are anagrams.
+    Example
+    Given ["lint", "intl", "inlt", "code"], return ["lint", "inlt", "intl"].
+    Given ["ab", "ba", "cd", "dc", "e"], return ["ab", "ba", "cd", "dc"].
+    Note
+    All inputs will be in lower-case
+    """
+
+    @staticmethod
+    def pick_anagrams(self):
+        print("Pick Anagrams")
     pass
 
 
 def run():
-    StrOpts.try_str_contain()
+    StrOpts.try_anagrams_word()
+
