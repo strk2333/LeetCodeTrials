@@ -1,3 +1,4 @@
+
 class MFuns:
 
     """
@@ -74,55 +75,44 @@ class MFuns:
     """
 
     def ant6(self):
-        tot = int(input("总盘数:"))
-        sel = int(input("最多选取数量:"))
-        raw_data = input("输入食品数据:")
-        food = raw_data.split(" ")
-        self.get_max_ai(food, sel)
+        input1 = input("总盘数, 最多选取数量:")
+        limit = int(input1.split(" ")[1])
+        input2 = input("输入食品数据:")
+        food = input2.split(" ")
+        self.get_max_ai(food, limit)
 
     def get_max_ai(self, food, limit):
-        ai_count = [0] * len(food)
-
-        for i in range(0, len(food)):
-            ai_count[i] = 0
-            residue_list = list.copy(food)
-            ai_count[i] += int(food[i])
-            limit_copy = limit
-            if i != 0:
-                residue_list.remove(food[i - 1])
-            if i != len(food) - 1:
-                residue_list.remove(food[i + 1])
-            residue_list.remove(food[i])
-            limit_copy -= 1
-
-            ai_count[i] = self.find_ai(ai_count[i], food, residue_list, limit_copy)
-
-        for i in ai_count:
-            print("Main Line Ai: ", i)
-
-        print("Max Ai: ", max(ai_count))
+        print("Max Ai: ", self.find_ai(0, food, food, limit))
 
     def find_ai(self, ai_count, food, residue_list, limit):
-        if len(residue_list) == 0 or limit == 0:
+        if len(residue_list) == 0 or limit == 0 or self.is_all_negative(residue_list):
             return ai_count
 
         ai_count_list = []
         for i in range(0, len(residue_list)):
             residue_list_copy = residue_list.copy()
+            limit_copy = limit
             ai_count_list.insert(i, ai_count)
             food_index = food.index(residue_list_copy[i])
+
             if food_index != 0 and residue_list_copy.__contains__(food[food_index - 1]):
                 residue_list_copy.remove(food[food_index - 1])
             if food_index != len(food) - 1 and residue_list_copy.__contains__(food[food_index + 1]):
                 residue_list_copy.remove(food[food_index + 1])
             residue_list_copy.remove(food[food_index])
 
+            limit_copy -= 1
             ai_count_list[i] += int(food[food_index])
-            limit -= 1
-            ai_count_list[i] = self.find_ai(ai_count_list[i], food, residue_list_copy, limit)
+            ai_count_list[i] = self.find_ai(ai_count_list[i], food, residue_list_copy, limit_copy)
             print("Branch Line Ai: ", ai_count_list[i])
 
         return max(ai_count_list)
+
+    def is_all_negative(self, residue_list):
+        for i in residue_list:
+            if int(i) > 0:
+                return False
+        return True
 
     def run(self):
         #MFuns.shuffling_card(self)
