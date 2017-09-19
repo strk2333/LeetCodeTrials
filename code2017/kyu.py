@@ -98,29 +98,31 @@ class MFuns:
             ai_count[i] = self.find_ai(ai_count[i], food, residue_list, limit_copy)
 
         for i in ai_count:
-            print(i)
+            print("Main Line Ai: ", i)
+
+        print("Max Ai: ", max(ai_count))
 
     def find_ai(self, ai_count, food, residue_list, limit):
         if len(residue_list) == 0 or limit == 0:
             return ai_count
-        max_value = 0
-        max_index = 0
+
+        ai_count_list = []
         for i in range(0, len(residue_list)):
-            if max_value < int(residue_list[i]):
-                max_value = int(residue_list[i])
-                max_index = i
+            residue_list_copy = residue_list.copy()
+            ai_count_list.insert(i, ai_count)
+            food_index = food.index(residue_list_copy[i])
+            if food_index != 0 and residue_list_copy.__contains__(food[food_index - 1]):
+                residue_list_copy.remove(food[food_index - 1])
+            if food_index != len(food) - 1 and residue_list_copy.__contains__(food[food_index + 1]):
+                residue_list_copy.remove(food[food_index + 1])
+            residue_list_copy.remove(food[food_index])
 
-        food_index = food.index(residue_list[max_index])
-        if food_index != 0 and residue_list.__contains__(food[food_index - 1]):
-            residue_list.remove(food[food_index - 1])
-        if food_index != len(food) - 1 and residue_list.__contains__(food[food_index + 1]):
-            residue_list.remove(food[food_index + 1])
-        residue_list.remove(food[food_index])
+            ai_count_list[i] += int(food[food_index])
+            limit -= 1
+            ai_count_list[i] = self.find_ai(ai_count_list[i], food, residue_list_copy, limit)
+            print("Branch Line Ai: ", ai_count_list[i])
 
-        ai_count += max_value
-        limit -= 1
-
-        return self.find_ai(ai_count, food, residue_list, limit)
+        return max(ai_count_list)
 
     def run(self):
         #MFuns.shuffling_card(self)
