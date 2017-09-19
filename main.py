@@ -1,4 +1,4 @@
-import code2017 as c1
+import code2017
 
 if __name__ == '__main__':
-    c1.run()
+    code2017.run()

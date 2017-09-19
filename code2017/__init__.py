@@ -1,5 +1,6 @@
-from code2017 import nana
+from code2017 import nana as c7
+from code2017 import kyu as c9
 
 
 def run():
-    nana.MFuns().run()
+    c9.MFuns().run()
