@@ -85,32 +85,42 @@ class MFuns:
         print("Max Ai: ", self.find_ai(0, food, food, limit))
 
     def find_ai(self, ai_count, food, residue_list, limit):
-        if len(residue_list) == 0 or limit == 0 or self.is_all_negative(residue_list):
+        if len(residue_list) == 0 or limit <= 0:
             return ai_count
 
         ai_count_list = []
+        limit_copy = 0
         for i in range(0, len(residue_list)):
-            residue_list_copy = residue_list.copy()
-            limit_copy = limit
-            ai_count_list.insert(i, ai_count)
-            food_index = food.index(residue_list_copy[i])
+            if residue_list[i] is not None:
+                residue_list_copy = residue_list.copy()
+                limit_copy = limit
+                ai_count_list.insert(i, ai_count)
 
-            if food_index != 0 and residue_list_copy.__contains__(food[food_index - 1]):
-                residue_list_copy.remove(food[food_index - 1])
-            if food_index != len(food) - 1 and residue_list_copy.__contains__(food[food_index + 1]):
-                residue_list_copy.remove(food[food_index + 1])
-            residue_list_copy.remove(food[food_index])
+                if i != 0:
+                    residue_list_copy[i - 1] = None
+                if i != len(food) - 1:
+                    residue_list_copy[i + 1] = None
+                residue_list_copy[i] = None
+                print("Residue: ", residue_list_copy)
 
-            limit_copy -= 1
-            ai_count_list[i] += int(food[food_index])
-            ai_count_list[i] = self.find_ai(ai_count_list[i], food, residue_list_copy, limit_copy)
-            print("Branch Line Ai: ", ai_count_list[i])
+                limit_copy -= 1
+                ai_count_list[i] += int(food[i])
+                ai_count_list[i] = self.find_ai(ai_count_list[i], food, residue_list_copy, limit_copy)
+                print("Branch Line Ai: ", ai_count_list[i])
+            else:
+                ai_count_list.insert(i, None)
 
-        return max(ai_count_list)
+        while ai_count_list.__contains__(None):
+            ai_count_list.remove(None)
+
+        if len(ai_count_list) == 0:
+            return int(food[0])
+        else:
+            return max(ai_count_list)
 
     def is_all_negative(self, residue_list):
         for i in residue_list:
-            if int(i) > 0:
+            if i is not None and int(i) > 0:
                 return False
         return True
 
