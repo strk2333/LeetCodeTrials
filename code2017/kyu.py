@@ -1,3 +1,4 @@
+import sys
 
 class MFuns:
 
@@ -158,11 +159,37 @@ class MFuns:
     5/4
     """
     def alien_route(self):
+        input1 = sys.argv[1].split('n')
+        test_count = int(input1[0])
+        index = 1
+        result_list = []
+        for i in range(test_count):
+            spot_count = int(str.split(input1[index], '__')[0])
+            route_count = int(str.split(input1[index], '__')[1])
+            index += 1
+
+            route_list = []
+            for j in range(route_count):
+                route_list.append([int(input1[index].split('__')[0]),
+                                   int(input1[index].split('__')[1]),
+                                   int(input1[index].split('__')[2])])
+                index += 1
+            s = int(str.split(input1[index], '__')[0])
+            t = int(str.split(input1[index], '__')[1])
+            index += 1
+
+            speed_list = self.pack_route_data(spot_count, route_list)
+            self.force_route(result_list, [], speed_list, 0, s, t)
+            print(speed_list)
+            print(result_list)
+            result_list = []
+
+    def alien_route2(self):
         input1 = int(input("Input the amount of test cases: "))
 
         for i in range(input1):
             input2 = input("Input the amount of aliens routes: ")
-            alien_count = int(input2.split(' ')[0])
+            spot_count = int(input2.split(' ')[0])
             route_count = int(input2.split(' ')[1])
 
             route_list = []
@@ -174,14 +201,48 @@ class MFuns:
             s = int(input4.split(' ')[0])
             t = int(input4.split(' ')[1])
 
-            self.alien_best_route(alien_count, route_count, route_list, s, t)
+            self.alien_best_route(spot_count, route_count, route_list, s, t)
 
         pass
 
-    def alien_best_route(self, alien_count, route_count, route_list, s, t):
+    def force_route(self, result_list, process_list, speed_list, index, s, t):
+        if index == speed_list.__len__():
+            return result_list
 
+        tmp_list = []
+        if len(process_list) >= 2:
+            gap = max(process_list) / min(process_list)
+            tmp_list = process_list
+        else:
+            gap = -1
+
+        for i in range(len(speed_list[index])):
+            if len(process_list) <= i:
+                process_list.append([])
+                process_list[i] = speed_list[index][i]
+            if gap == -1 or max(process_list) / min(process_list) < gap:
+                gap = max(process_list) / min(process_list)
+                result_list = process_list.copy()
+            elif gap != -1:
+                result_list = tmp_list
+            index += 1
+            result_list = self.force_route(result_list, process_list, speed_list, index, s, t)
+            index -= 1
+
+        return result_list
         pass
 
+    def pack_route_data(self, spot_count, route_list):
+        speed_list = []
+        for i in range(spot_count - 1):
+            speed_list.append([])
+            for j in route_list:
+                if j[0] == i + 1 and j[1] == i + 2:
+                    speed_list[i].append(j[2])
+
+        return speed_list
+        pass
+    
     """
     Travel in time
     时间限制：4000 ms  |  内存限制：65535 KB
