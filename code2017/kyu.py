@@ -41,9 +41,7 @@ class MFuns:
         while not result == s:
             self.shuffling(n, result)
             count += 1
-
         print(count)
-        pass
 
     def shuffling(self, n, result):
         for i in range(1, 2 * n + 1):
@@ -180,8 +178,8 @@ class MFuns:
 
             speed_list = self.pack_route_data(spot_count, route_list)
             result_list = self.force_route(result_list, [], speed_list, 0, s, t)
-            print(speed_list)
-            print(result_list)
+            print("Source:", speed_list)
+            print("Result:", result_list)
             result_list = []
 
     def alien_route2(self):
@@ -205,7 +203,6 @@ class MFuns:
             speed_list = self.pack_route_data(spot_count, route_list)
             self.force_route(result_list, [], speed_list, 0, s, t)
             result_list = []
-        pass
 
     def force_route(self, result_list, process_list, speed_list, index, s, t):
         if index == speed_list.__len__():
@@ -225,7 +222,6 @@ class MFuns:
             index -= 1
 
         return result_list
-        pass
 
     def pack_route_data(self, spot_count, route_list):
         speed_list = []
@@ -236,8 +232,7 @@ class MFuns:
                     speed_list[i].append(j[2])
 
         return speed_list
-        pass
-    
+
     """
     Travel in time
     时间限制：4000 ms  |  内存限制：65535 KB
@@ -274,25 +269,71 @@ class MFuns:
     If Bob can’t reach spot E in T units of time, you should output just a “0” (without quotation marks).
     样例输入
     1
-    4 4 22 0 3
-    1 1 1 1
-    5 7 9 12
-    0 1 10
+    4 4 22 0 3  # spots count, path count, time limitation, start, end 
+    1 1 1 1     # spot time cost
+    5 7 9 12    # satisfaction
+    0 1 10      # start end cost
     1 3 10
     0 2 10
     2 3 10
     样例输出
-    Case #1:
-    21
+    Case #1:    # Case #test_number:
+    21          # the greast satisfaction value
     """
+    def travel_in_time(self):
+        input1 = str.split(sys.argv[1], 'n')
+        test_count = input1[0]
+        input_line2 = input1[1].split('__')
+        spot_count = input_line2[0]
+        path_count = input_line2[1]
+        time_limit = input_line2[2]
+        start = input_line2[3]
+        end = input_line2[4]
+        input_line3 = input1[2].split('__')
+        time_cost = []
+        for i in input_line3:
+            time_cost.append(i)
+        input_line4 = input1[3].split('__')
+        satis = []
+        for i in input_line4:
+            satis.append(i)
+        route = []
+        for i in range(4, len(input1)):
+            route.append(input1[i].split('__'))
+
+        print(route)
+        paths = self.force_route_spots(route, start, end, int(start), [], 0)  # index?
+        for i in paths:
+            i.insert(0, start)
+        print(paths)
+
+    def force_route_spots(self, route, start, end, index, paths, path_index):
+        route_copy = route.copy()
+        for i in route_copy:
+            if index == int(end):
+                index = int(start)
+            if int(i[0]) == index:
+                if len(paths) <= path_index:
+                    paths.append([])
+
+                route_copy.remove(i)
+
+                if int(i[1]) != end:
+                    paths[path_index].append(i[1])
+                    index = int(i[1])
+                    paths = self.force_route_spots(route_copy, start, end, index, paths, path_index)
+                else:
+                    paths.append([])
+                    index = int(start)
+                    path_index += 1
+
+        return paths
 
     def run(self):
-        #MFuns.shuffling_card(self)
-        #MFuns.ant6(self)
-        MFuns.alien_route(self)
-        pass
-
-    pass
+        #self.shuffling_card()
+        #self.ant6()
+        #self.alien_route()
+        self.travel_in_time()
 
 
 def run():
