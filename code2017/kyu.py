@@ -179,7 +179,7 @@ class MFuns:
             index += 1
 
             speed_list = self.pack_route_data(spot_count, route_list)
-            self.force_route(result_list, [], speed_list, 0, s, t)
+            result_list = self.force_route(result_list, [], speed_list, 0, s, t)
             print(speed_list)
             print(result_list)
             result_list = []
@@ -187,6 +187,7 @@ class MFuns:
     def alien_route2(self):
         input1 = int(input("Input the amount of test cases: "))
 
+        result_list = []
         for i in range(input1):
             input2 = input("Input the amount of aliens routes: ")
             spot_count = int(input2.split(' ')[0])
@@ -201,30 +202,24 @@ class MFuns:
             s = int(input4.split(' ')[0])
             t = int(input4.split(' ')[1])
 
-            self.alien_best_route(spot_count, route_count, route_list, s, t)
-
+            speed_list = self.pack_route_data(spot_count, route_list)
+            self.force_route(result_list, [], speed_list, 0, s, t)
+            result_list = []
         pass
 
     def force_route(self, result_list, process_list, speed_list, index, s, t):
         if index == speed_list.__len__():
             return result_list
 
-        tmp_list = []
-        if len(process_list) >= 2:
-            gap = max(process_list) / min(process_list)
-            tmp_list = process_list
-        else:
-            gap = -1
+        if len(process_list) < 2:
+            for i in speed_list:
+                process_list.append(i[0])
+            result_list = process_list.copy()
 
         for i in range(len(speed_list[index])):
-            if len(process_list) <= i:
-                process_list.append([])
-                process_list[i] = speed_list[index][i]
-            if gap == -1 or max(process_list) / min(process_list) < gap:
-                gap = max(process_list) / min(process_list)
+            process_list[index] = speed_list[index][i]
+            if max(process_list) / min(process_list) < max(result_list) / min(result_list):
                 result_list = process_list.copy()
-            elif gap != -1:
-                result_list = tmp_list
             index += 1
             result_list = self.force_route(result_list, process_list, speed_list, index, s, t)
             index -= 1
