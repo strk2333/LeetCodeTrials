@@ -309,21 +309,17 @@ class MFuns:
 
     def force_route_spots(self, route, start, end, index, paths, path_index):
         route_copy = route.copy()
-        for i in route_copy:
-            if index == int(end):
-                index = int(start)
-            if int(i[0]) == index:
+        for i in route:
+            if int(i[0]) == int(index):
                 if len(paths) <= path_index:
                     paths.append([])
 
+                paths[path_index].append(i[1])
                 route_copy.remove(i)
 
-                if int(i[1]) != end:
-                    paths[path_index].append(i[1])
-                    index = int(i[1])
-                    paths = self.force_route_spots(route_copy, start, end, index, paths, path_index)
+                if int(i[1]) != int(end):
+                    paths = self.force_route_spots(route_copy, start, end, int(i[1]), paths, path_index)
                 else:
-                    paths.append([])
                     index = int(start)
                     path_index += 1
 
