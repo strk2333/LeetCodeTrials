@@ -1,1 +1,1 @@
-# LeetCodeTrials
+# Leet Code Trials

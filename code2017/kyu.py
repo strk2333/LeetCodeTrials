@@ -302,7 +302,7 @@ class MFuns:
             route.append(input1[i].split('__'))
 
         print(route)
-        paths = self.force_route_spots(route, start, end, int(start), [], 0)  # index?
+        paths = self.force_route_spots(route, start, end, int(start), [], 0)
         for i in paths:
             i.insert(0, start)
         print(paths)
@@ -324,6 +324,34 @@ class MFuns:
                     path_index += 1
 
         return paths
+
+
+    """
+        SUDOKU
+    """
+    def resolve_sudoku(self):
+
+
+
+
+        pass
+
+    def fill_blanks(self, source):
+        if len(source) != 9:
+            return None
+
+        fill_list = []
+        filled_list = []
+        for i in source:
+            if i != 0:
+                filled_list.append(int(i))
+
+        for i in range(1, 10):
+            if i not in filled_list:
+                fill_list.append(i)
+
+        return fill_list
+        pass
 
     def run(self):
         #self.shuffling_card()
