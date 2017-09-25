@@ -343,38 +343,118 @@ class MFuns:
                 time_list[len(time_list) - 1] += int(spot_cost[int(path[spot])])
 
         return min(time_list)
+
     """
         SUDOKU
     """
     def resolve_sudoku(self):
+        sudoku = self.get_sudoku()
 
+        self.force_resolve_sudoku(sudoku)
 
+    def print_sudoku(self, sudoku):
+        for line in sudoku:
+            for i in line:
+                print(i, end=" ")
+            print()
 
+    def force_resolve_sudoku(self, sudoku):
+        result = []
+        for i in range(len(sudoku)):
+            for j in range(len(sudoku)):
+                result.append([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
+        while self.sudoku_tokenai(sudoku):
+            values1 = []
+            values2 = []
+            values3 = []
+            v_lines = []
+            b_lines = []
+            for i in range(len(sudoku)):
+                v_lines.append([])
+            for i in range(len(sudoku)):
+                b_lines.append([])
+            # Horizontal
+            for line in sudoku:
+                values1.append(self.get_unvalued_nums(line))
+
+            # Vertical
+            for i in range(len(sudoku)):
+                for j in range(len(sudoku)):
+                    v_lines[j].append(sudoku[i][j])
+            for line in v_lines:
+                values2.append(self.get_unvalued_nums(line))
+
+            # block
+            for i in range(len(sudoku)):
+                for j in range(len(sudoku)):
+                    b_lines[int(i / 3) + int(j / 3) * 3].append(sudoku[i][j])
+            for line in b_lines:
+                values3.append(self.get_unvalued_nums(line))
+
+            self.update_possible_values(result, values1, values2, values3, len(sudoku))
+            self.try_fill_values(sudoku, result)
+
+            print('_____________________________')
+            print(values1)
+            print(values2)
+            print(values3)
+            print(result)
+        for i in result:
+            if len(i) == 2:
+                print(i, result.index(i))
         pass
 
-    def fill_blanks(self, source):
-        if len(source) != 9:
-            return None
+    def sudoku_tokenai(self, sudoku):
+        for i in sudoku:
+            if i == 0:
+                return False
+        return True
 
-        fill_list = []
-        filled_list = []
-        for i in source:
-            if i != 0:
-                filled_list.append(int(i))
+    def try_fill_values(self, sudoku, possible_values):
+        has_fixed_change = False
+        nogoru = 1
+        while not has_fixed_change:
+            for i in range(len(possible_values)):
+                if int(sudoku[int(i / len(sudoku))][int(i % len(sudoku))]) == 0 and len(possible_values[i]) == nogoru:
+                    sudoku[int(i / len(sudoku))][int(i % len(sudoku))] = possible_values[i][0]
+                    has_fixed_change = True
+            nogoru += 1
 
-        for i in range(1, 10):
-            if i not in filled_list:
-                fill_list.append(i)
+    def update_possible_values(self, result, values1, values2, values3, s_len):
+        for i in range(s_len):
+            for j in range(s_len):
+                result[i * s_len + j] = list(set(values1[i]) & set(values2[j]) & set(values3[int(i / 3) + int(j / 3) * 3]))
 
-        return fill_list
-        pass
+    def get_unvalued_nums(self, grids):
+        tmp = []
+        for i in grids:
+            if int(i) != 0:
+                tmp.append(i)
+
+        re = [i for i in range(1, 10)]
+        for i in tmp:
+            re.remove(int(i))
+        return re
+
+    def get_sudoku(self):
+        input1 = sys.argv[1]
+        lines = input1.split('n')
+        test_count = int(lines[0])
+        list.remove(lines, lines[0])
+        sudoku = []
+        for i in range(len(lines)):
+            sudoku.append(str.split(lines[i], '__'))
+
+        return sudoku
 
     def run(self):
-        #self.shuffling_card()
-        #self.ant6()
-        #self.alien_route()
-        self.travel_in_time()
+        # self.shuffling_card()
+        # self.ant6()
+        # self.alien_route()
+        # self.travel_in_time()
+        self.resolve_sudoku()
+        pass
 
 
 def run():
