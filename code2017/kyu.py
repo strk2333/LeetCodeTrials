@@ -290,9 +290,9 @@ class MFuns:
         start = input_line2[3]
         end = input_line2[4]
         input_line3 = input1[2].split('__')
-        time_cost = []
+        spot_cost = []
         for i in input_line3:
-            time_cost.append(i)
+            spot_cost.append(i)
         input_line4 = input1[3].split('__')
         satis = []
         for i in input_line4:
@@ -305,7 +305,10 @@ class MFuns:
         paths = self.force_route_spots(route, start, end, int(start), [], 0)
         for i in paths:
             i.insert(0, start)
+
+        result = self.find_best_route(paths, route, spot_cost, satis, time_limit)
         print(paths)
+        print(result)
 
     def force_route_spots(self, route, start, end, index, paths, path_index):
         route_copy = route.copy()
@@ -326,7 +329,20 @@ class MFuns:
 
         return paths
 
+    def find_best_route(self, paths, route, spot_cost, satis, time_limit):
+        time_list = []
+        for path in paths:
+            time_list.append(0)
+            for s in range(len(path)):
+                for t in route:
+                    if path[s] == t[0] and path[s + 1] == t[1]:
+                        time_list[len(time_list) - 1] += int(t[2])
+                        break
 
+            for spot in range(len(path) - 2):
+                time_list[len(time_list) - 1] += int(spot_cost[int(path[spot])])
+
+        return min(time_list)
     """
         SUDOKU
     """
