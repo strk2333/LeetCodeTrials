@@ -319,8 +319,9 @@ class MFuns:
 
                 if int(i[1]) != int(end):
                     paths = self.force_route_spots(route_copy, start, end, int(i[1]), paths, path_index)
-                else:
-                    index = int(start)
+                    pass
+
+                if index == int(start):
                     path_index += 1
 
         return paths
